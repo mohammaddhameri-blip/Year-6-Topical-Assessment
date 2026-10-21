@@ -1,0 +1,31 @@
+name: Unit 10 smoke checks
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Unit 10 JavaScript syntax and structure
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          for(const file of ['unit10/index.html','unit10/teacher/index.html']){
+            const html=fs.readFileSync(file,'utf8');
+            const js=html.match(/<script>([\s\S]*?)<\/script>/i)?.[1];
+            if(!js)throw Error('No script '+file);
+            new Function(js);
+            console.log('OK',file,js.length,'script characters');
+          }
+          if(!fs.readFileSync('index.html','utf8').includes('unit10/'))throw Error('Unit missing from homepage');
+          NODE
+      - name: Check Edge Function responds without exposing data
+        run: |
+          URL="https://qekcgsfeomjckctiubgm.supabase.co/functions/v1/year6-unit10"
+          CODE=$(curl -sS -o /tmp/unit10-response -w '%{http_code}' -X POST "$URL" -H 'Content-Type: application/json' -H 'Origin: https://mohammaddhameri-blip.github.io' --data '{"action":"start","code":"INVALID"}')
+          cat /tmp/unit10-response
+          test "$CODE" = "401" || { echo "Expected invalid-code rejection (401), got $CODE"; exit 1; }
