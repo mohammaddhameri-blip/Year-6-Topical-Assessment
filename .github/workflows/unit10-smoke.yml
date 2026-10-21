@@ -29,3 +29,6 @@ jobs:
           CODE=$(curl -sS -o /tmp/unit10-response -w '%{http_code}' -X POST "$URL" -H 'Content-Type: application/json' -H 'Origin: https://mohammaddhameri-blip.github.io' --data '{"action":"start","code":"INVALID"}')
           cat /tmp/unit10-response
           test "$CODE" = "401" || { echo "Expected invalid-code rejection (401), got $CODE"; exit 1; }
+          CODE=$(curl -sS -o /tmp/unit10-lookup -w '%{http_code}' -X POST "$URL" -H 'Content-Type: application/json' -H 'Origin: https://mohammaddhameri-blip.github.io' --data '{"action":"start","code":"Y6-999"}')
+          cat /tmp/unit10-lookup
+          test "$CODE" = "401" -o "$CODE" = "403" || { echo "Expected missing pupil or disabled official mode, got $CODE"; exit 1; }
