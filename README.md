@@ -1,28 +1,32 @@
 # Year 6 Topical Assessment
 
-This repository is a GitHub Pages static webapp. The homepage lists topical English assessments; **Unit 10: It’s a Mystery** is available at `unit10/`. GitHub Actions deploys the site to GitHub Pages on each push to `main`.
+GitHub Pages webapp: [Homepage](https://mohammaddhameri-blip.github.io/Year-6-Topical-Assessment/) · [Unit 10: It's a Mystery](https://mohammaddhameri-blip.github.io/Year-6-Topical-Assessment/unit10/) · [Authorised teacher review](https://mohammaddhameri-blip.github.io/Year-6-Topical-Assessment/unit10/teacher/).
 
-## Installation / deployment
+## Unit 10 — four skills
 
-1. Extract `Year6_Topical_Assessment_GitHub_Upload.zip`.
-2. **Do not upload the ZIP itself**. In GitHub, open this repository, choose **Add file → Upload files**, and drag in the contents of the `year6_topical_publish` folder: `index.html`, `.nojekyll`, `unit10/` and `README.md`. GitHub's browser UI may need directory upload support; if it flattens directories, use GitHub Desktop or `git` to commit the extracted folder structure.
-3. Under **Settings → Pages → Build and deployment**, choose **Deploy from a branch**, branch `main`, folder `/ (root)`, then Save.
-4. The default URL should be `https://mohammaddhameri-blip.github.io/Year-6-Topical-Assessment/` after GitHub Pages finishes publishing. Only treat it as live after checking it loads.
+- Reading: original mystery with 8 multiple-choice questions.
+- Listening: narrated community-park incident using the device speech engine with speed control, then four written comprehension answers.
+- Reading–Writing: two subjective questions about a community notice.
+- Writing: 4 dialogue choices and 5 original dialogue lines.
+- Speaking: 3 microphone recordings about someone special and 2 follow-ups.
+- Intended duration 20–30 minutes, without a forced timeout.
 
-## Unit 10 functionality
+## Release state
 
-- Original mystery Reading passage with 8 multiple-choice questions.
-- An original community-park listening script played using the device’s text-to-speech engine with adjustable speed, followed by 4 short answers. The pre-recorded MP3 from the offline pilot is not currently hosted here.
-- Subjective reading-and-writing comprehension and individual dialogue writing.
-- Speaking requires 3 browser microphone recordings, with a microphone test and replay.
-- Typed responses autosave using localStorage; recorded speech saves using IndexedDB. A network connection may be needed for the device speech engine; this hosted edition has no dedicated service worker.
-- Tester codes `TST-###` only. No server verification; **this is NOT an official exam**.
-- The submission screen says **Awaiting teacher review** but **no actual submission leaves the device**.
+**Secure teacher testing only; official Year 6 pupils are not yet admitted.** The backend currently accepts registered tester codes and uses its own secure random session token. The access-code entry field is masked and does not display example tester codes.
 
-## Production requirements still outstanding
+Written responses autosave on the device and synchronize to the secure `year6-unit10` Supabase Edge Function. Voice recordings are kept locally and uploaded to a **private** storage bucket. Final submission locks the attempt. A teacher with a separately provisioned Supabase Auth account and explicit authorisation can inspect responses and recordings, enter scores, TP1–6 and CEFR-aligned indicators, approve results, and authorise a retake. Pupils only see the scored report **after teacher approval**.
 
-A secure backend must verify existing `Y6-###` accounts against the shared student roster, enforce one official attempt with teacher-authorised retakes, securely upload audio and written responses, prevent loss across devices, run AI-assisted marking, and require teacher approval before pupils can view TP or CEFR-indicative reports. **Never expose the teacher answer scheme in this public repository.**
+No service-role credentials or answer keys are included in this public repository. The teacher blueprint remains separate and private.
 
-## Teacher blueprint
+### School administration still required
 
-A private teacher blueprint is provided separately as `Year6_Unit10_Assessment_Blueprint.md`. It must **not** be committed to this public repository because it contains answer keys and scoring details.
+Teacher authorization is not self-service: an administrator must invite/create a Supabase Auth user and explicitly allowlist that account in `public.y6_unit10_teacher_access`. See [Unit 10 setup details](unit10/README.md). The official mode flag `public.y6_unit10_settings.official_enabled` must remain `false` until stronger pupil identity confirmation and appropriate safeguarding and consent procedures are in place. Pupil codes alone are not secure identity verification.
+
+### Remaining improvements
+
+AI-assisted marking and transcription are not connected; scores are presently teacher-entered. Narration uses device speech synthesis and is not the previously generated MP3. Interrupted attempts resume on the original device while session and locally saved recordings remain intact. Recovery from a lost device/session and full multi-device offline media synchronization require additional work.
+
+## Deployment
+
+The `main` branch automatically deploys via GitHub Pages Actions. `.github/workflows/unit10-smoke.yml` also checks both UIs' JavaScript syntax and verifies rejection of unauthorised API requests. 
