@@ -1,6 +1,6 @@
 # Year 6 Topical Assessment
 
-This repository is a GitHub Pages static webapp. The homepage lists topical English assessments; **Unit 10: It’s a Mystery** is available at `unit10/`.
+This repository is a GitHub Pages static webapp. The homepage lists topical English assessments; **Unit 10: It’s a Mystery** is available at `unit10/`. GitHub Actions deploys the site to GitHub Pages on each push to `main`.
 
 ## Installation / deployment
 
@@ -12,10 +12,10 @@ This repository is a GitHub Pages static webapp. The homepage lists topical Engl
 ## Unit 10 functionality
 
 - Original mystery Reading passage with 8 multiple-choice questions.
-- Original listening narration (`unit10/audio/vandalism.mp3`) with 4 short answers.
+- An original community-park listening script played using the device’s text-to-speech engine with adjustable speed, followed by 4 short answers. The pre-recorded MP3 from the offline pilot is not currently hosted here.
 - Subjective reading-and-writing comprehension and individual dialogue writing.
 - Speaking requires 3 browser microphone recordings, with a microphone test and replay.
-- Typed responses autosave using localStorage; audio saves using IndexedDB; offline-capable after initial load.
+- Typed responses autosave using localStorage; recorded speech saves using IndexedDB. A network connection may be needed for the device speech engine; this hosted edition has no dedicated service worker.
 - Tester codes `TST-###` only. No server verification; **this is NOT an official exam**.
 - The submission screen says **Awaiting teacher review** but **no actual submission leaves the device**.
 
